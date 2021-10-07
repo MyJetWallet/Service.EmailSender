@@ -26,5 +26,8 @@ namespace Service.EmailSender.Grpc.Models
         
         [DataMember(Order = 7)]
         public string DeviceType { get; set; }
+        
+        [DataMember(Order = 8)]
+        public string Token { get; set; }
     }
 }

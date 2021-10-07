@@ -109,14 +109,6 @@ namespace Service.EmailSender.Services
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
 
-            var tokenHexResult = _settingsManager.GenerateEmailTokenHex(EmailTypes.Recovery, settingsResult.Value.TokenExpires, requestContract.TraderId,
-                requestContract.Platform, requestContract.Brand);
-
-            if (tokenHexResult.Error)
-            {
-                return SettingsManager.EmailError(tokenHexResult.ErrorMessage);
-            }
-
             LinkResponse response;
             try
             {
@@ -124,7 +116,7 @@ namespace Service.EmailSender.Services
                 {
                     Brand = requestContract.Brand,
                     DeviceType = Enum.Parse<DeviceTypeEnum>(requestContract.DeviceType, true), 
-                    Parameters = new (){{"jw_command","ForgotPassword"},{"jw_token",tokenHexResult.Value}}
+                    Parameters = new (){{"jw_command","ForgotPassword"},{"jw_token", requestContract.Token}}
                 });
             }
             catch (Exception e)
