@@ -1,13 +1,14 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using MyJetWallet.Brands;
 using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using Serilog;
 using Service.EmailSender.Domain.Models;
-using SimpleTrading.Common.Abstractions.Brand;
 
 namespace Service.EmailSender.Services
 {
@@ -107,7 +108,7 @@ namespace Service.EmailSender.Services
 
         public OperationResult<string> GenerateFrom(string brand)
         {
-            var brandFromNoSQL = _brandReader.Get(brand);
+            var brandFromNoSQL = _brandReader.GetById(brand);
 
             if (brandFromNoSQL == null)
             {
@@ -117,7 +118,7 @@ namespace Service.EmailSender.Services
                 };
             }
 
-            var from = $"noreply@{brandFromNoSQL.BaseDomain}";
+            var from = $"noreply@{brandFromNoSQL.DomainsPool.FirstOrDefault()}";
 
             return new OperationResult<string>(from);
         }
