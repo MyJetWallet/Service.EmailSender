@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using Destructurama.Attributed;
 using Service.EmailSender.Domain.Models;
 
 namespace Service.EmailSender.Grpc.Models
@@ -14,7 +15,8 @@ namespace Service.EmailSender.Grpc.Models
 
         [DataMember(Order = 3)]
         public string Lang { get; set; }
-
+        
+        [LogMasked(ShowFirst = 3, ShowLast = 3, PreserveLength = true)]
         [DataMember(Order = 4)]
         public string Email { get; set; }
 
