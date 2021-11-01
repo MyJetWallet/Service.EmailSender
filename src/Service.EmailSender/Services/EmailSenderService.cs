@@ -341,9 +341,19 @@ namespace Service.EmailSender.Services
     {
         public static string Mask(this string email)
         {
-            var sha = email.EncodeToSha1();
-            var mask = Convert.ToBase64String(sha);
-            return mask;
+            if (email.Length > 8)
+            {
+                var mask = $"{email.Substring(0, 3)}**{email.Substring(email.Length - 4, 3)}";
+                return mask;
+            }
+            
+            if (email.Length > 5)
+            {
+                var mask = $"{email[0]}**{email[^1]}";
+                return mask;
+            }
+            
+            return "*****";
         }
     }
 }
