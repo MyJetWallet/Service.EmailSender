@@ -10,7 +10,6 @@ using Service.EmailSender.Domain.Models;
 using Service.EmailSender.Domain.Models.DataModels;
 using Service.EmailSender.Grpc;
 using Service.EmailSender.Grpc.Models;
-using SimpleTrading.Emails.Abstractions.Emails;
 
 namespace Service.EmailSender.Services
 {
@@ -45,7 +44,7 @@ namespace Service.EmailSender.Services
 
             if (settingsResult.Error)
             {
-                _logger.LogError("Unable to send RegistrationConfirmEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email, settingsResult.ErrorMessage);
+                _logger.LogError("Unable to send RegistrationConfirmEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email.Mask(), settingsResult.ErrorMessage);
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
 
@@ -62,11 +61,11 @@ namespace Service.EmailSender.Services
 
             if (sendingResult.Error)
             {
-                _logger.LogError("Unable to send RegistrationConfirmEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email, sendingResult.ErrorMessage);
+                _logger.LogError("Unable to send RegistrationConfirmEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email.Mask(), sendingResult.ErrorMessage);
                 return SettingsManager.EmailError(sendingResult.ErrorMessage);
             }
             
-            _logger.LogInformation("Sent RegistrationConfirmEmail to {maskedEmail}", requestContract.Email);
+            _logger.LogInformation("Sent RegistrationConfirmEmail to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
 
@@ -81,7 +80,7 @@ namespace Service.EmailSender.Services
 
             if (settingsResult.Error)
             {               
-                _logger.LogWarning("Unable to send VerificationCodeEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email, settingsResult.ErrorMessage);
+                _logger.LogWarning("Unable to send VerificationCodeEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email.Mask(), settingsResult.ErrorMessage);
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
 
@@ -106,7 +105,7 @@ namespace Service.EmailSender.Services
                 return SettingsManager.EmailError(sendingResult.ErrorMessage);
             }
             
-            _logger.LogInformation("Sent VerificationCodeEmail to {maskedEmail}", requestContract.Email);
+            _logger.LogInformation("Sent VerificationCodeEmail to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
 
@@ -116,7 +115,7 @@ namespace Service.EmailSender.Services
 
             if (settingsResult.Error)
             {
-                _logger.LogError("Unable to send RecoveryEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email, settingsResult.ErrorMessage);
+                _logger.LogError("Unable to send RecoveryEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email.Mask(), settingsResult.ErrorMessage);
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
 
@@ -132,7 +131,7 @@ namespace Service.EmailSender.Services
             }
             catch (Exception e)
             {
-                _logger.LogError("Unable to send RecoveryEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email, e.Message);
+                _logger.LogError("Unable to send RecoveryEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email.Mask(), e.Message);
 
                 return SettingsManager.EmailError(e.Message);
             }
@@ -154,11 +153,11 @@ namespace Service.EmailSender.Services
 
             if (sendingResult.Error)
             {
-                _logger.LogError("Unable to send RecoveryEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email, sendingResult.ErrorMessage);
+                _logger.LogError("Unable to send RecoveryEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email.Mask(), sendingResult.ErrorMessage);
                 return SettingsManager.EmailError(sendingResult.ErrorMessage);
             }
             
-            _logger.LogInformation("Sent RecoveryEmail to {maskedEmail}", requestContract.Email);
+            _logger.LogInformation("Sent RecoveryEmail to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
 
@@ -168,7 +167,7 @@ namespace Service.EmailSender.Services
 
             if (settingsResult.Error)
             {
-                _logger.LogError("Unable to send AlreadyRegisteredEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email, settingsResult.ErrorMessage);
+                _logger.LogError("Unable to send AlreadyRegisteredEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email.Mask(), settingsResult.ErrorMessage);
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
 
@@ -184,7 +183,7 @@ namespace Service.EmailSender.Services
             }
             catch (Exception e)
             {
-                _logger.LogWarning("Unable to send AlreadyRegisteredEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email, e.Message);
+                _logger.LogWarning("Unable to send AlreadyRegisteredEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email.Mask(), e.Message);
                 return SettingsManager.EmailError(e.Message);
             }
 
@@ -204,11 +203,11 @@ namespace Service.EmailSender.Services
 
             if (sendingResult.Error)
             {                
-                _logger.LogError("Unable to send AlreadyRegisteredEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email, sendingResult.ErrorMessage);
+                _logger.LogError("Unable to send AlreadyRegisteredEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email.Mask(), sendingResult.ErrorMessage);
                 return SettingsManager.EmailError(sendingResult.ErrorMessage);
             }
             
-            _logger.LogInformation("Sent AlreadyRegisteredEmail to {maskedEmail}", requestContract.Email);
+            _logger.LogInformation("Sent AlreadyRegisteredEmail to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
 
@@ -225,7 +224,7 @@ namespace Service.EmailSender.Services
 
             if (settingsResult.Error)
             {                
-                _logger.LogError("Unable to send WithdrawalVerificationEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email, settingsResult.ErrorMessage);
+                _logger.LogError("Unable to send WithdrawalVerificationEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
             
@@ -252,11 +251,11 @@ namespace Service.EmailSender.Services
 
             if (sendingResult.Error)
             {                
-                _logger.LogError("Unable to send WithdrawalVerificationEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email, sendingResult.ErrorMessage);
+                _logger.LogError("Unable to send WithdrawalVerificationEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
                 return SettingsManager.EmailError(sendingResult.ErrorMessage);
             }
             
-            _logger.LogInformation("Sent WithdrawalVerificationEmail to {maskedEmail}", requestContract.Email);
+            _logger.LogInformation("Sent WithdrawalVerificationEmail to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
 
@@ -266,7 +265,7 @@ namespace Service.EmailSender.Services
 
             if (settingsResult.Error)
             {                
-                _logger.LogError("Unable to send TransferByPhoneVerificationEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email, settingsResult.ErrorMessage);
+                _logger.LogError("Unable to send TransferByPhoneVerificationEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
             
@@ -291,11 +290,11 @@ namespace Service.EmailSender.Services
 
             if (sendingResult.Error)
             {                
-                _logger.LogError("Unable to send TransferByPhoneVerificationEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email, sendingResult.ErrorMessage);
+                _logger.LogError("Unable to send TransferByPhoneVerificationEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
                 return SettingsManager.EmailError(sendingResult.ErrorMessage);
             }
             
-            _logger.LogInformation("Sent TransferByPhoneVerificationEmail to {maskedEmail}", requestContract.Email);
+            _logger.LogInformation("Sent TransferByPhoneVerificationEmail to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
 
@@ -305,7 +304,7 @@ namespace Service.EmailSender.Services
 
             if (settingsResult.Error)
             {               
-                _logger.LogError("Unable to send LoginEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email, settingsResult.ErrorMessage);
+                _logger.LogError("Unable to send LoginEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
             
@@ -327,12 +326,24 @@ namespace Service.EmailSender.Services
 
             if (sendingResult.Error)
             {                
-                _logger.LogError("Unable to send LoginEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email, sendingResult.ErrorMessage);
+                _logger.LogError("Unable to send LoginEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
                 return SettingsManager.EmailError(sendingResult.ErrorMessage);
             }
             
-            _logger.LogInformation("Sent LoginEmail to {maskedEmail}", requestContract.Email);
+            _logger.LogInformation("Sent LoginEmail to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);        
+        }
+
+        
+    }
+    
+    public static class EmailMaskedHelper
+    {
+        public static string Mask(this string email)
+        {
+            var sha = email.EncodeToSha1();
+            var mask = Convert.ToBase64String(sha);
+            return mask;
         }
     }
 }
