@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Service.EmailSender.Domain.Models
+﻿namespace Service.EmailSender.Domain.Models
 {
     public interface IHelloMessage
     {

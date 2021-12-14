@@ -51,8 +51,5 @@ namespace Service.EmailSender.Settings
         
         [YamlProperty("EmailSender.EmailTemplatesSettings.SpotLoginEmailSettings")]
         public Dictionary<string, BaseEmailSettings> SpotLoginEmailSettings { get; set; }
-        
-        [YamlProperty("EmailSender.DynamicLinkGrpcServiceUrl")]
-        public string DynamicLinkGrpcServiceUrl { get; set; }
     }
 }

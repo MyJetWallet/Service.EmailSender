@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using MyJetWallet.Brands;
+using MyJetWallet.DynamicLinkGenerator.Ioc;
 using MyJetWallet.Sdk.NoSql;
-using Service.DynamicLinkGenerator.Client;
 using Service.EmailSender.Services;
 
 namespace Service.EmailSender.Modules
@@ -12,11 +12,8 @@ namespace Service.EmailSender.Modules
         {
             var noSqlClient = builder.CreateNoSqlClient(Program.ReloadedSettings(e => e.MyNoSqlReaderHostPort));
 
-
             builder.RegisterBrandReader(noSqlClient);
-
-            builder.RegisterDynamicLinkGeneratorClient(Program.Settings.DynamicLinkGrpcServiceUrl);
-
+            builder.RegisterDynamicLinkClient(noSqlClient);
             builder.RegisterType<SendGridEmailSender>().AsSelf().SingleInstance();
             builder.RegisterType<SettingsManager>().AsSelf().SingleInstance();
         }

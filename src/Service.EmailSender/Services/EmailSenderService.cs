@@ -2,10 +2,9 @@ using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using MyJetWallet.DynamicLinkGenerator.Models;
+using MyJetWallet.DynamicLinkGenerator.Services;
 using MyJetWallet.Sdk.Service;
-using Service.DynamicLinkGenerator.Domain.Models.Enums;
-using Service.DynamicLinkGenerator.Grpc;
-using Service.DynamicLinkGenerator.Grpc.Models;
 using Service.EmailSender.Domain.Models;
 using Service.EmailSender.Domain.Models.DataModels;
 using Service.EmailSender.Grpc;
@@ -16,12 +15,12 @@ namespace Service.EmailSender.Services
     public class EmailSenderService: IEmailSenderService
     {
         private readonly SendGridEmailSender _emailSender;
-        private readonly ILinkGenerator _linkGenerator;
+        private readonly IDynamicLinkClient _linkGenerator;
         private readonly SettingsManager _settingsManager;
         private readonly ILogger<EmailSenderService> _logger;
 
         public EmailSenderService(SendGridEmailSender emailSender, 
-            ILinkGenerator linkGenerator, 
+            IDynamicLinkClient linkGenerator, 
             SettingsManager settingsManager, 
             ILogger<EmailSenderService> logger)
         {
@@ -119,14 +118,14 @@ namespace Service.EmailSender.Services
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
 
-            LinkResponse response;
+            string link;
             try
             {
-                response = _linkGenerator.GenerateDeepLink(new GenerateLinkRequest()
+                link = _linkGenerator.GenerateForgotPasswordLink(new GenerateForgotPasswordLinkRequest()
                 {
                     Brand = requestContract.Brand,
                     DeviceType = Enum.Parse<DeviceTypeEnum>(requestContract.DeviceType, true), 
-                    Parameters = new (){{"jw_command","ForgotPassword"},{"jw_token", requestContract.Token}}
+                    Token = requestContract.Token
                 });
             }
             catch (Exception e)
@@ -144,7 +143,7 @@ namespace Service.EmailSender.Services
                 Brand = requestContract.Brand,
                 Data = new RecoveryEmailDataModel
                 {
-                    Link = response.Link,
+                    Link = link,
                     TraderName = requestContract.FullName
                 }
             };
@@ -171,14 +170,13 @@ namespace Service.EmailSender.Services
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
 
-            LinkResponse response;
+            string link;
             try
             {
-                response = _linkGenerator.GenerateDeepLink(new GenerateLinkRequest()
+                link = _linkGenerator.GenerateLoginLink(new GenerateLoginLinkRequest()
                 {
                     Brand = requestContract.Brand,
                     DeviceType = DeviceTypeEnum.Unknown,
-                    Parameters = new (){{"jw_command","Login"}}
                 });
             }
             catch (Exception e)
@@ -195,7 +193,7 @@ namespace Service.EmailSender.Services
                 Brand = requestContract.Brand,
                 Data = new AlreadyRegisteredEmailDataModel()
                 {
-                    Link = response.Link,
+                    Link = link,
                 }
             };
 

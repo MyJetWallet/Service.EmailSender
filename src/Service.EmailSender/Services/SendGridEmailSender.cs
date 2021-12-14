@@ -7,7 +7,6 @@ using MyJetWallet.Brands;
 using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using Serilog;
 using Service.EmailSender.Domain.Models;
 
 namespace Service.EmailSender.Services

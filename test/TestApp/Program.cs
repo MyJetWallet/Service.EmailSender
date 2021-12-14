@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using ProtoBuf.Grpc.Client;
 using Service.EmailSender.Client;
-using Service.EmailSender.Grpc.Models;
 
 namespace TestApp
 {
