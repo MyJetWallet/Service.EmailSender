@@ -121,12 +121,13 @@ namespace Service.EmailSender.Services
             string link;
             try
             {
-                link = _linkGenerator.GenerateForgotPasswordLink(new GenerateForgotPasswordLinkRequest()
+                var links = _linkGenerator.GenerateForgotPasswordLink(new GenerateForgotPasswordLinkRequest()
                 {
                     Brand = requestContract.Brand,
                     DeviceType = Enum.Parse<DeviceTypeEnum>(requestContract.DeviceType, true), 
                     Token = requestContract.Token
                 });
+                link = links.longLink;
             }
             catch (Exception e)
             {
@@ -173,11 +174,12 @@ namespace Service.EmailSender.Services
             string link;
             try
             {
-                link = _linkGenerator.GenerateLoginLink(new GenerateLoginLinkRequest()
+                var links = _linkGenerator.GenerateLoginLink(new GenerateLoginLinkRequest()
                 {
                     Brand = requestContract.Brand,
                     DeviceType = DeviceTypeEnum.Unknown,
                 });
+                link = links.longLink;
             }
             catch (Exception e)
             {
