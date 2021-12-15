@@ -332,7 +332,76 @@ namespace Service.EmailSender.Services
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);        
         }
 
-        
+        public async ValueTask<EmailSenderGrpcResponseContract> SendDepositSuccessfulEmailAsync(DepositSuccessfulGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotDepositSuccessfulSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send SendDepositSuccessfulEmailAsync to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new DepositSuccessfulDataModel()
+                {
+                    AssetSymbol = requestContract.AssetSymbol,
+                    Amount = requestContract.Amount,
+                }
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send SendDepositSuccessfulEmailAsync to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent SendDepositSuccessfulEmailAsync to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+        }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendWithdrawalSuccessfulEmailAsync(WithdrawalSuccessfulGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotWithdrawalSuccessfulSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send SendWithdrawalSuccessfulEmailAsync to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new WithdrawalSuccessfulDataModel()
+                {
+                    AssetSymbol = requestContract.AssetSymbol,
+                    Amount = requestContract.Amount,
+                    FullName = requestContract.FullName
+                }
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send SendWithdrawalSuccessfulEmailAsync to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent SendWithdrawalSuccessfulEmailAsync to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+        }
     }
     
     public static class EmailMaskedHelper

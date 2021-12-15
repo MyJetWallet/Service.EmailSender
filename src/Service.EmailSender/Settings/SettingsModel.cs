@@ -51,5 +51,11 @@ namespace Service.EmailSender.Settings
         
         [YamlProperty("EmailSender.EmailTemplatesSettings.SpotLoginEmailSettings")]
         public Dictionary<string, BaseEmailSettings> SpotLoginEmailSettings { get; set; }
+        
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotDepositSuccessfulSettings")]
+        public Dictionary<string, BaseEmailSettings> SpotDepositSuccessfulSettings { get; set; } 
+        
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotWithdrawalSuccessfulSettings")] 
+        public Dictionary<string, BaseEmailSettings> SpotWithdrawalSuccessfulSettings { get; set; }
     }
 }

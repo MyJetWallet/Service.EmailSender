@@ -27,5 +27,11 @@ namespace Service.EmailSender.Grpc
         
         [OperationContract]
         ValueTask<EmailSenderGrpcResponseContract> SendLoginEmailAsync(LoginEmailGrpcRequestContract requestContract);
+        
+        [OperationContract]
+        ValueTask<EmailSenderGrpcResponseContract> SendDepositSuccessfulEmailAsync(DepositSuccessfulGrpcRequestContract requestContract);
+        
+        [OperationContract]
+        ValueTask<EmailSenderGrpcResponseContract> SendWithdrawalSuccessfulEmailAsync(WithdrawalSuccessfulGrpcRequestContract requestContract);
     }
 }
