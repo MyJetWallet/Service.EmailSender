@@ -85,12 +85,18 @@ namespace Service.EmailSender.Services
                 msg.SetTemplateData(emailModel.Data);
 
                 var response = await _client.SendEmailAsync(msg);
-
+                
                 if (response.StatusCode != HttpStatusCode.Accepted)
                 {
+                    var body = await response.Body.ReadAsStringAsync();
+                    
                     return new OperationResult<bool>
                     {
-                        ErrorMessage = "SendGrid returned: " + JsonConvert.SerializeObject(response)
+                        ErrorMessage = "SendGrid returned: " + JsonConvert.SerializeObject(new
+                        {
+                            StatusCode = response.StatusCode,
+                            Body = body
+                        })
                     };
                 }
             }
