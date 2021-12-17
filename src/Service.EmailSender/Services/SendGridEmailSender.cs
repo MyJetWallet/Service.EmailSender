@@ -123,7 +123,15 @@ namespace Service.EmailSender.Services
                 };
             }
 
-            var from = $"noreply@{brandFromNoSQL.DomainsPool.FirstOrDefault()}";
+            if (string.IsNullOrWhiteSpace(brandFromNoSQL.EmailSenderAddress))
+            {
+                return new OperationResult<string>
+                {
+                    ErrorMessage = $"Email sender address for brand {brand} not found "
+                };
+            }
+
+            var from = brandFromNoSQL.EmailSenderAddress;
 
             return new OperationResult<string>(from);
         }
