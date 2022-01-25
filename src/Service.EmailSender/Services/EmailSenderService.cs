@@ -239,6 +239,7 @@ namespace Service.EmailSender.Services
                     Link = requestContract.Link,
                     AssetSymbol = requestContract.AssetSymbol,
                     Amount = requestContract.Amount,
+                    ReceiveAmount = requestContract.ReceiveAmount,
                     DestinationAddress = requestContract.DestinationAddress,
                     IpAddress = requestContract.IpAddress,
                     Code = requestContract.Code,

@@ -46,6 +46,9 @@ namespace Service.EmailSender.Grpc.Models
         
         [DataMember(Order = 13)]
         public bool IsInternal { get; set; }
+        
+        [DataMember(Order = 14)] 
+        public string ReceiveAmount { get; set; }
 
     }
 }

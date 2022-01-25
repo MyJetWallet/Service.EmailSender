@@ -27,5 +27,8 @@ namespace Service.EmailSender.Domain.Models.DataModels
         
         [JsonProperty("feeAmount")]
         public string FeeAmount { get; set; }
+        
+        [JsonProperty("receiveAmount")]
+        public string ReceiveAmount { get; set; }
     }
 }
