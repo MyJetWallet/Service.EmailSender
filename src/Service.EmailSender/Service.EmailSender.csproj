@@ -26,7 +26,7 @@
     <PackageReference Include="SimpleTrading.Common.MyNoSql" Version="1.0.45" />
     <PackageReference Include="SimpleTrading.Emails.Abstractions" Version="1.0.3" />
     <PackageReference Include="SimpleTrading.ServiceStatusReporterConnector" Version="1.0.9" />
-    <PackageReference Include="MySettingsReader" Version="1.2.1" />
+    <PackageReference Include="MySettingsReader" Version="1.2.2" />
     <PackageReference Include="SimpleTrading.TokensManager" Version="1.3.2" />
   </ItemGroup>
 
