@@ -73,6 +73,5 @@ namespace Service.EmailSender
 
             Program.EmailKey = key.EncodeToSha1();
         }
-        
     }
 }
