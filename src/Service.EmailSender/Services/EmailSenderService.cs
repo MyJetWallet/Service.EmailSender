@@ -178,6 +178,7 @@ namespace Service.EmailSender.Services
                 {
                     Brand = requestContract.Brand,
                     DeviceType = DeviceTypeEnum.Unknown,
+                    Email = requestContract.Email
                 });
                 link = links.longLink;
             }
