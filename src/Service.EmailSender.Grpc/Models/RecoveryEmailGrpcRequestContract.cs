@@ -31,5 +31,8 @@ namespace Service.EmailSender.Grpc.Models
         
         [DataMember(Order = 8)]
         public string Token { get; set; }
+        
+        [DataMember(Order = 9)]
+        public string Code { get; set; }
     }
 }

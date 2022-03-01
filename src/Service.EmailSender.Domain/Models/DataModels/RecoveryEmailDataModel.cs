@@ -9,5 +9,8 @@ namespace Service.EmailSender.Domain.Models.DataModels
 
         [JsonProperty("full_name")]
         public string TraderName { get; set; }
+        
+        [JsonProperty("code")]
+        public string Code { get; set; }
     }
 }

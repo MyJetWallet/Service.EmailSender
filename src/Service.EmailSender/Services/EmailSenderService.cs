@@ -145,7 +145,8 @@ namespace Service.EmailSender.Services
                 Data = new RecoveryEmailDataModel
                 {
                     Link = link,
-                    TraderName = requestContract.FullName
+                    TraderName = requestContract.FullName,
+                    Code = requestContract.Code
                 }
             };
 
