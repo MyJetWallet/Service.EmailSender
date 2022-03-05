@@ -125,7 +125,8 @@ namespace Service.EmailSender.Services
                 {
                     Brand = requestContract.Brand,
                     DeviceType = Enum.Parse<DeviceTypeEnum>(requestContract.DeviceType, true), 
-                    Token = requestContract.Token
+                    Token = requestContract.Token,
+                    Code = requestContract.Code
                 });
                 link = links.longLink;
             }
