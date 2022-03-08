@@ -408,6 +408,174 @@ namespace Service.EmailSender.Services
             _logger.LogInformation("Sent SendWithdrawalSuccessfulEmailAsync to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendWithdrawalCancelledEmailAsync(WithdrawalCancelledGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotWithdrawalCancelledSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send WithdrawalCancelledEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new WithdrawalCancelledDataModel()
+                {
+                    AssetSymbol = requestContract.AssetSymbol,
+                    Amount = requestContract.Amount,
+                }
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send WithdrawalCancelledEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent WithdrawalCancelledEmail to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+        }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendKycDocumentsApprovedEmailAsync(KycApprovedEmailGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotKycDocumentsApprovedSettings, requestContract);
+
+            if (settingsResult.Error)
+            {
+                _logger.LogError("Unable to send KycDocumentsApprovedEmail to email {maskedEmail}. Error message: {errorMessage}",  requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+
+            string link;
+            try
+            {
+                var links = _linkGenerator.GenerateKycSuccessLink(new ()
+                {
+                    Brand = requestContract.Brand,
+                    DeviceType = DeviceTypeEnum.Unknown,
+                });
+                link = links.longLink;
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning("Unable to send KycDocumentsApprovedEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), e.Message);
+                return SettingsManager.EmailError(e.Message);
+            }
+
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new KycDocumentsApprovedDataModel()
+                {
+                    Link = link,
+                }
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send KycDocumentsApprovedEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent KycDocumentsApprovedEmail to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+        }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendKycDocumentsDeclinedEmailAsync(KycDeclinedEmailGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotKycDocumentsDeclinedSettings, requestContract);
+
+            if (settingsResult.Error)
+            {
+                _logger.LogError("Unable to send KycDocumentsDeclined to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+
+            string link;
+            try
+            {
+                var links = _linkGenerator.GenerateKycFailLink(new ()
+                {
+                    Brand = requestContract.Brand,
+                    DeviceType = DeviceTypeEnum.Unknown,
+                });
+                link = links.longLink;
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning("Unable to send KycDocumentsDeclined to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), e.Message);
+                return SettingsManager.EmailError(e.Message);
+            }
+
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new KycDocumentsDeclinedDataModel()
+                {
+                    Link = link,
+                }
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send KycDocumentsDeclined to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent KycDocumentsDeclined to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+            
+        }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendKycBannedEmailAsync(KycBannedEmailGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotKycBannedSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send KycBannedEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new KycBannedDataModel()
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send KycBannedEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent KycBannedEmail to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+            
+        }
     }
     
     public static class EmailMaskedHelper

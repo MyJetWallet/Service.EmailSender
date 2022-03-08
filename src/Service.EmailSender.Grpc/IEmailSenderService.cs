@@ -33,5 +33,17 @@ namespace Service.EmailSender.Grpc
         
         [OperationContract]
         ValueTask<EmailSenderGrpcResponseContract> SendWithdrawalSuccessfulEmailAsync(WithdrawalSuccessfulGrpcRequestContract requestContract);
+        
+        [OperationContract]
+        ValueTask<EmailSenderGrpcResponseContract> SendWithdrawalCancelledEmailAsync(WithdrawalCancelledGrpcRequestContract requestContract);
+        
+        [OperationContract]
+        ValueTask<EmailSenderGrpcResponseContract> SendKycDocumentsApprovedEmailAsync(KycApprovedEmailGrpcRequestContract requestContract);
+        
+        [OperationContract]
+        ValueTask<EmailSenderGrpcResponseContract> SendKycDocumentsDeclinedEmailAsync(KycDeclinedEmailGrpcRequestContract requestContract);
+        
+        [OperationContract]
+        ValueTask<EmailSenderGrpcResponseContract> SendKycBannedEmailAsync(KycBannedEmailGrpcRequestContract requestContract);
     }
 }

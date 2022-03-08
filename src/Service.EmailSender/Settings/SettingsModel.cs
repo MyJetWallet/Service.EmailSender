@@ -57,5 +57,13 @@ namespace Service.EmailSender.Settings
         
         [YamlProperty("EmailSender.EmailTemplatesSettings.SpotWithdrawalSuccessfulSettings")] 
         public Dictionary<string, BaseEmailSettings> SpotWithdrawalSuccessfulSettings { get; set; }
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotWithdrawalCancelledSettings")] 
+        public Dictionary<string, BaseEmailSettings> SpotWithdrawalCancelledSettings { get; set; }
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotKycDocumentsApprovedSettings")] 
+        public Dictionary<string, BaseEmailSettings> SpotKycDocumentsApprovedSettings { get; set; }
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotKycDocumentsDeclinedSettings")] 
+        public Dictionary<string, BaseEmailSettings> SpotKycDocumentsDeclinedSettings { get; set; }
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotKycBannedSettings")] 
+        public Dictionary<string, BaseEmailSettings> SpotKycBannedSettings { get; set; }
     }
 }
