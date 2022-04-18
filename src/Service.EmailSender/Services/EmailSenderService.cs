@@ -574,8 +574,46 @@ namespace Service.EmailSender.Services
             
             _logger.LogInformation("Sent KycBannedEmail to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
-            
         }
+        
+        public async ValueTask<EmailSenderGrpcResponseContract> SendRecurringBuyFailedEmailAsync(RecurrentBuyFailedGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotAutoInvestFailSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send RecurringBuyFailed to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new RecurrentBuyFailedDataModel
+                {
+                    ToAsset = requestContract.ToAsset,
+                    FromAmount = requestContract.FromAmount,
+                    FromAsset = requestContract.FromAsset,
+                    FailTime = requestContract.FailTime,
+                    FailureReason = requestContract.FailureReason
+                }
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send RecurringBuyFailed to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent RecurringBuyFailed to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+        }
+
     }
     
     public static class EmailMaskedHelper

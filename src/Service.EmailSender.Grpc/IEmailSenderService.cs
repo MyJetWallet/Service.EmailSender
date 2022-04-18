@@ -45,5 +45,8 @@ namespace Service.EmailSender.Grpc
         
         [OperationContract]
         ValueTask<EmailSenderGrpcResponseContract> SendKycBannedEmailAsync(KycBannedEmailGrpcRequestContract requestContract);
+        
+        [OperationContract]
+        ValueTask<EmailSenderGrpcResponseContract> SendRecurringBuyFailedEmailAsync(RecurrentBuyFailedGrpcRequestContract requestContract);
     }
 }
