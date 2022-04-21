@@ -47,10 +47,12 @@ namespace Service.EmailSender.Services
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
 
-            var emailModel = new EmailModel
+	        string templateId = settingsResult.Value.SendGridTemplateId;
+
+	        var emailModel = new EmailModel
             {
                 To = requestContract.Email,
-                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                SendGridTemplateId = templateId,
                 Subject = settingsResult.Value.Subject,
                 Brand = requestContract.Brand,
                 Data = new { }
@@ -64,7 +66,7 @@ namespace Service.EmailSender.Services
                 return SettingsManager.EmailError(sendingResult.ErrorMessage);
             }
             
-            _logger.LogInformation("Sent RegistrationConfirmEmail to {maskedEmail}", requestContract.Email.Mask());
+            _logger.LogInformation("Sent RegistrationConfirmEmail to {maskedEmail}, templateId: {templateId}", requestContract.Email.Mask(), templateId);
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
 
@@ -83,10 +85,12 @@ namespace Service.EmailSender.Services
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
 
-            var emailModel = new EmailModel
+	        string templateId = settingsResult.Value.SendGridTemplateId;
+
+	        var emailModel = new EmailModel
             {
                 To = requestContract.Email,
-                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                SendGridTemplateId = templateId,
                 Subject = settingsResult.Value.Subject,
                 Brand = requestContract.Brand,
                 Data = new
@@ -104,7 +108,7 @@ namespace Service.EmailSender.Services
                 return SettingsManager.EmailError(sendingResult.ErrorMessage);
             }
             
-            _logger.LogInformation("Sent VerificationCodeEmail to {maskedEmail}", requestContract.Email.Mask());
+            _logger.LogInformation("Sent VerificationCodeEmail to {maskedEmail}, templateId: {templateId}", requestContract.Email.Mask(), templateId);
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
 
@@ -137,10 +141,12 @@ namespace Service.EmailSender.Services
                 return SettingsManager.EmailError(e.Message);
             }
 
-            var emailModel = new EmailModel
+	        string templateId = settingsResult.Value.SendGridTemplateId;
+
+	        var emailModel = new EmailModel
             {
                 To = requestContract.Email,
-                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                SendGridTemplateId = templateId,
                 Subject = settingsResult.Value.Subject,
                 Brand = requestContract.Brand,
                 Data = new RecoveryEmailDataModel
@@ -159,7 +165,7 @@ namespace Service.EmailSender.Services
                 return SettingsManager.EmailError(sendingResult.ErrorMessage);
             }
             
-            _logger.LogInformation("Sent RecoveryEmail to {maskedEmail}", requestContract.Email.Mask());
+            _logger.LogInformation("Sent RecoveryEmail to {maskedEmail}, templateId: {templateId}", requestContract.Email.Mask(), templateId);
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
 
@@ -190,10 +196,12 @@ namespace Service.EmailSender.Services
                 return SettingsManager.EmailError(e.Message);
             }
 
-            var emailModel = new EmailModel
+	        string templateId = settingsResult.Value.SendGridTemplateId;
+
+	        var emailModel = new EmailModel
             {
                 To = requestContract.Email,
-                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                SendGridTemplateId = templateId,
                 Subject = settingsResult.Value.Subject,
                 Brand = requestContract.Brand,
                 Data = new AlreadyRegisteredEmailDataModel()
@@ -210,7 +218,7 @@ namespace Service.EmailSender.Services
                 return SettingsManager.EmailError(sendingResult.ErrorMessage);
             }
             
-            _logger.LogInformation("Sent AlreadyRegisteredEmail to {maskedEmail}", requestContract.Email.Mask());
+            _logger.LogInformation("Sent AlreadyRegisteredEmail to {maskedEmail}, templateId: {templateId}", requestContract.Email.Mask(), templateId);
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
 
@@ -311,11 +319,13 @@ namespace Service.EmailSender.Services
                 _logger.LogError("Unable to send LoginEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
-            
-            var emailModel = new EmailModel
+
+	        string templateId = settingsResult.Value.SendGridTemplateId;
+
+	        var emailModel = new EmailModel
             {
                 To = requestContract.Email,
-                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                SendGridTemplateId = templateId,
                 Subject = settingsResult.Value.Subject,
                 Brand = requestContract.Brand,
                 Data = new LoginEmailDataModel
@@ -334,11 +344,11 @@ namespace Service.EmailSender.Services
                 return SettingsManager.EmailError(sendingResult.ErrorMessage);
             }
             
-            _logger.LogInformation("Sent LoginEmail to {maskedEmail}", requestContract.Email.Mask());
+            _logger.LogInformation("Sent LoginEmail to {maskedEmail}, templateId: {templateId}", requestContract.Email.Mask(), templateId);
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);        
         }
 
-        public async ValueTask<EmailSenderGrpcResponseContract> SendDepositSuccessfulEmailAsync(DepositSuccessfulGrpcRequestContract requestContract)
+	    public async ValueTask<EmailSenderGrpcResponseContract> SendDepositSuccessfulEmailAsync(DepositSuccessfulGrpcRequestContract requestContract)
         {
             var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotDepositSuccessfulSettings, requestContract);
 
