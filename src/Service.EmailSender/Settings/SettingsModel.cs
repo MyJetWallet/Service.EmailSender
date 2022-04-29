@@ -72,5 +72,8 @@ namespace Service.EmailSender.Settings
         
         [YamlProperty("EmailSender.EmailTemplatesSettings.SpotAutoInvestFailSettings")] 
         public Dictionary<string, BaseEmailSettings> SpotAutoInvestFailSettings { get; set; }
+        
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotJobCvPositionSubmitEmailSettings")]
+        public Dictionary<string, BaseEmailSettings> SpotJobCvPositionSubmitEmailSettings { get; set; }
     }
 }

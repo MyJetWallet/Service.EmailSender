@@ -48,5 +48,8 @@ namespace Service.EmailSender.Grpc
         
         [OperationContract]
         ValueTask<EmailSenderGrpcResponseContract> SendRecurringBuyFailedEmailAsync(RecurrentBuyFailedGrpcRequestContract requestContract);
+        
+        [OperationContract]
+        ValueTask<EmailSenderGrpcResponseContract> SendJobCvPositionSubmitEmailAsync(JobCvPositionSubmitGrpcRequestContract requestContract);
     }
 }
