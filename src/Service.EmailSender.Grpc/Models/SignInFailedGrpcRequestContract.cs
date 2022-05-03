@@ -5,7 +5,7 @@ using Service.EmailSender.Domain.Models;
 namespace Service.EmailSender.Grpc.Models
 {
     [DataContract]
-    public class TwoFaSettingsChangedGrpcRequestContract: IEmailGrpcRequestContract
+    public class SignInFailedGrpcRequestContract: IEmailGrpcRequestContract
     {
         [DataMember(Order = 1)]
         public string Brand { get; set; }

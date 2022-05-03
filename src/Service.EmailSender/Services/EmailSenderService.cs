@@ -270,7 +270,7 @@ namespace Service.EmailSender.Services
             _logger.LogInformation("Sent WithdrawalVerificationEmail to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
-
+        
         public async ValueTask<EmailSenderGrpcResponseContract> SendTransferByPhoneVerificationEmailAsync(TransferByPhoneVerificationGrpcRequestContract requestContract)
         {
             var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotTransferByPhoneVerificationEmailSettings, requestContract);
@@ -308,6 +308,112 @@ namespace Service.EmailSender.Services
             
             _logger.LogInformation("Sent TransferByPhoneVerificationEmail to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+        }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendTransferReceivedEmailAsync(TransferReceivedGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotTransferReceivedEmailSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send TransferReceivedEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new DepositSuccessfulDataModel()
+                {
+                    AssetSymbol = requestContract.AssetSymbol,
+                    Amount = requestContract.Amount,
+                }
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send TransferReceivedEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent TransferReceivedEmail to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);        
+        }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendTransferSuccessfulEmailAsync(TransferSuccessfulGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotTransferSuccessfulEmailSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send TransferSuccessfulEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new WithdrawalSuccessfulDataModel()
+                {
+                    AssetSymbol = requestContract.AssetSymbol,
+                    Amount = requestContract.Amount,
+                    FullName = requestContract.FullName
+                }
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send TransferSuccessfulEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent TransferSuccessfulEmail to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+        }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendTransferCancelledEmailAsync(TransferCancelledGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotTransferCancelledEmailSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send TransferCancelledEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new WithdrawalCancelledDataModel()
+                {
+                    AssetSymbol = requestContract.AssetSymbol,
+                    Amount = requestContract.Amount,
+                }
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send TransferCancelledEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent TransferCancelledEmail to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);        
         }
 
         public async ValueTask<EmailSenderGrpcResponseContract> SendLoginEmailAsync(LoginEmailGrpcRequestContract requestContract)
@@ -348,7 +454,38 @@ namespace Service.EmailSender.Services
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);        
         }
 
-	    public async ValueTask<EmailSenderGrpcResponseContract> SendDepositSuccessfulEmailAsync(DepositSuccessfulGrpcRequestContract requestContract)
+        public async ValueTask<EmailSenderGrpcResponseContract> Send2FaSettingsChangedEmailAsync(TwoFaSettingsChangedGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.Spot2faSettingsChangedEmailSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send 2faSettingsChangedEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new ()
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send 2faSettingsChangedEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent 2faSettingsChangedEmail to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+        }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendDepositSuccessfulEmailAsync(DepositSuccessfulGrpcRequestContract requestContract)
         {
             var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotDepositSuccessfulSettings, requestContract);
 
@@ -585,7 +722,134 @@ namespace Service.EmailSender.Services
             _logger.LogInformation("Sent KycBannedEmail to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
-        
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendSignInFailed1HEmailAsync(SignInFailedGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotSignInFailed1hEmailSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send SignInFailed1hEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new ()
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send SignInFailed1hEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent SignInFailed1hEmail to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+            
+        }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendSignInFailed24HEmailAsync(SignInFailedGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotSignInFailed24hEmailSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send SignInFailed24hEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new ()
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send SignInFailed24hEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent SignInFailed24hEmail to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+            
+        }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendSignInFailed2Fa1HEmailAsync(SignInFailedGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotSignInFailed2fa1hEmailSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send SignInFailed2Fa1h to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new ()
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send SignInFailed2Fa1h to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent SignInFailed2Fa1h to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+            
+        }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendSignInFailed2Fa24HEmailAsync(SignInFailedGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotSignInFailed2fa24hEmailSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send SignInFailed2fa24hEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new ()
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send SignInFailed2fa24hEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent SignInFailed2fa24hEmail to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+        }
+
         public async ValueTask<EmailSenderGrpcResponseContract> SendRecurringBuyFailedEmailAsync(RecurrentBuyFailedGrpcRequestContract requestContract)
         {
             var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotAutoInvestFailSettings, requestContract);

@@ -75,5 +75,30 @@ namespace Service.EmailSender.Settings
         
         [YamlProperty("EmailSender.EmailTemplatesSettings.SpotJobCvPositionSubmitEmailSettings")]
         public Dictionary<string, BaseEmailSettings> SpotJobCvPositionSubmitEmailSettings { get; set; }
+        
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotTransferReceivedEmailSettings")]
+        public Dictionary<string, BaseEmailSettings> SpotTransferReceivedEmailSettings { get; set; }
+        
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotTransferCancelledEmailSettings")]
+        public Dictionary<string, BaseEmailSettings> SpotTransferCancelledEmailSettings { get; set; }
+        
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotTransferSuccessfulEmailSettings")]
+        public Dictionary<string, BaseEmailSettings> SpotTransferSuccessfulEmailSettings { get; set; }
+        
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotSignInFailed1hEmailSettings")]
+        public Dictionary<string, BaseEmailSettings> SpotSignInFailed1hEmailSettings { get; set; }
+        
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotSignInFailed24hEmailSettings")]
+        public Dictionary<string, BaseEmailSettings> SpotSignInFailed24hEmailSettings { get; set; }
+        
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotSignInFailed2fa1hEmailSettings")]
+        public Dictionary<string, BaseEmailSettings> SpotSignInFailed2fa1hEmailSettings { get; set; }
+        
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotSignInFailed2fa24hEmailSettings")]
+        public Dictionary<string, BaseEmailSettings> SpotSignInFailed2fa24hEmailSettings { get; set; }
+        
+        [YamlProperty("EmailSender.EmailTemplatesSettings.Spot2faSettingsChangedEmailSettings")]
+        public Dictionary<string, BaseEmailSettings> Spot2faSettingsChangedEmailSettings { get; set; }
+ 
     }
 }
