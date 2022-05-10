@@ -7,6 +7,7 @@ using MyJetWallet.DynamicLinkGenerator.Services;
 using MyJetWallet.Sdk.Service;
 using Service.EmailSender.Domain.Models;
 using Service.EmailSender.Domain.Models.DataModels;
+using Service.EmailSender.Domain.SettingModels;
 using Service.EmailSender.Grpc;
 using Service.EmailSender.Grpc.Models;
 
@@ -891,38 +892,33 @@ namespace Service.EmailSender.Services
         public async ValueTask<EmailSenderGrpcResponseContract> SendJobCvPositionSubmitEmailAsync(JobCvPositionSubmitGrpcRequestContract requestContract)
         {
             var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotJobCvPositionSubmitEmailSettings, requestContract);
+            string emailMasked = requestContract.Email.Mask();
 
-            if (settingsResult.Error)
+	        if (settingsResult.Error)
             {
-                _logger.LogError("Unable to send JobCvPositionSubmit to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                _logger.LogError("Unable to send JobCvPositionSubmit to email {maskedEmail}. Error message: {errorMessage}", emailMasked, settingsResult.ErrorMessage);
                 return SettingsManager.EmailError(settingsResult.ErrorMessage);
             }
 
-            var emailModel = new EmailModel
-            {
-                To = requestContract.Email,
-                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
-                Subject = settingsResult.Value.Subject,
-                Brand = requestContract.Brand,
-                Data = new JobCvPositionSubmitDataModel
-                {
-                    ApplicantName = requestContract.ApplicantName,
-                    PositionTitle = requestContract.PositionTitle
-                }
-            };
+	        var emailSettings = settingsResult.Value;
+	        string subject = emailSettings.Subject;
 
-            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+	        var templateData = new JobCvPositionSubmitDataModel
+	        {
+		        ApplicantName = requestContract.ApplicantName,
+		        PositionTitle = requestContract.PositionTitle
+	        };
 
-            if (sendingResult.Error)
+	        bool sended = await _emailSender.SendMailAsync(requestContract.Email, subject, emailSettings.SendGridTemplateId, templateData, emailSettings.From, subject);
+            if (!sended)
             {                
-                _logger.LogError("Unable to send JobCvPositionSubmit to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
-                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+                _logger.LogError("Unable to send JobCvPositionSubmit to  email {maskedEmail}.", emailMasked);
+                return SettingsManager.EmailError($"Unable to send JobCvPositionSubmit to  email {emailMasked}.");
             }
             
-            _logger.LogInformation("Sent JobCvPositionSubmit to {maskedEmail}", requestContract.Email.Mask());
-            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+            _logger.LogInformation("Sent JobCvPositionSubmit to {maskedEmail}", emailMasked);
+            return SettingsManager.EmailSentSuccessResponse(emailSettings, requestContract);
         }
-
     }
     
     public static class EmailMaskedHelper
