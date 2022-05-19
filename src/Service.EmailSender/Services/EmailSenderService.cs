@@ -252,6 +252,9 @@ namespace Service.EmailSender.Services
                     AssetSymbol = requestContract.AssetSymbol,
                     Amount = requestContract.Amount,
                     ReceiveAmount = requestContract.ReceiveAmount,
+                    TimeTrans = requestContract.Timestamp,
+                    PhoneModel = requestContract.PhoneModel,
+                    Location = requestContract.Location,
                     DestinationAddress = requestContract.DestinationAddress,
                     IpAddress = requestContract.IpAddress,
                     Code = requestContract.Code,
@@ -288,14 +291,17 @@ namespace Service.EmailSender.Services
                 SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
                 Subject = settingsResult.Value.Subject,
                 Brand = requestContract.Brand,
-                Data = new TransferVerificationDataModel()
+                Data = new TransferVerificationDataModel
                 {
                     Link = requestContract.Link,
                     AssetSymbol = requestContract.AssetSymbol,
                     Amount = requestContract.Amount,
                     DestinationPhone = requestContract.DestinationPhone,
                     IpAddress = requestContract.IpAddress,
-                    Code = requestContract.Code
+                    TimeTrans = requestContract.Timestamp,
+                    PhoneModel = requestContract.PhoneModel,
+                    Location = requestContract.Location,
+                    Code = requestContract.Code,
                 }
             };
 
@@ -327,10 +333,12 @@ namespace Service.EmailSender.Services
                 SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
                 Subject = settingsResult.Value.Subject,
                 Brand = requestContract.Brand,
-                Data = new DepositSuccessfulDataModel()
+                Data = new TransferReceivedDataModel
                 {
                     AssetSymbol = requestContract.AssetSymbol,
                     Amount = requestContract.Amount,
+                    TransId = requestContract.OperationId,
+                    TimeTrans = requestContract.Timestamp,
                 }
             };
 
@@ -362,11 +370,13 @@ namespace Service.EmailSender.Services
                 SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
                 Subject = settingsResult.Value.Subject,
                 Brand = requestContract.Brand,
-                Data = new WithdrawalSuccessfulDataModel()
+                Data = new WithdrawalSuccessfulDataModel
                 {
                     AssetSymbol = requestContract.AssetSymbol,
                     Amount = requestContract.Amount,
-                    FullName = requestContract.FullName
+                    FullName = requestContract.FullName,
+                    TransId = requestContract.OperationId,
+                    TimeTrans = requestContract.Timestamp
                 }
             };
 
@@ -439,7 +449,9 @@ namespace Service.EmailSender.Services
                 {
                     Email = requestContract.Email,
                     IpAddress = requestContract.Ip,
-                    LoginTime = requestContract.LoginTime
+                    LoginTime = requestContract.LoginTime,
+                    PhoneModel = requestContract.PhoneModel,
+                    Location = requestContract.Location,
                 }
             };
 
@@ -541,7 +553,9 @@ namespace Service.EmailSender.Services
                 {
                     AssetSymbol = requestContract.AssetSymbol,
                     Amount = requestContract.Amount,
-                    FullName = requestContract.FullName
+                    FullName = requestContract.FullName,
+                    TransId = requestContract.OperationId,
+                    TimeTrans = requestContract.Timestamp
                 }
             };
 
@@ -873,7 +887,7 @@ namespace Service.EmailSender.Services
                     FromAmount = requestContract.FromAmount,
                     FromAsset = requestContract.FromAsset,
                     FailTime = requestContract.FailTime,
-                    FailureReason = requestContract.FailureReason
+                    FailureReason = requestContract.FailureReason,
                 }
             };
 

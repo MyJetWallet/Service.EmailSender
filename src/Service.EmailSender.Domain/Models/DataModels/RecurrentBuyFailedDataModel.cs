@@ -4,13 +4,13 @@ namespace Service.EmailSender.Domain.Models.DataModels
 {
     public class RecurrentBuyFailedDataModel
     {
-        [JsonProperty("toAsset")]
+        [JsonProperty("assetSymbol")]
         public string ToAsset { get; set; }
 
         [JsonProperty("fromAmount")]
         public decimal FromAmount { get; set; }
         
-        [JsonProperty("fromAsset")]
+        [JsonProperty("fromAssetSymbol")]
         public string FromAsset { get; set; }
         
         [JsonProperty("failTime")]

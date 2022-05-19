@@ -25,5 +25,11 @@ namespace Service.EmailSender.Grpc.Models
         
         [DataMember(Order = 6)] 
         public string Amount { get; set; }
+
+        [DataMember(Order = 7)]
+        public string OperationId { get; set; }
+        
+        [DataMember(Order = 8)]
+        public string Timestamp { get; set; }
     }
 }

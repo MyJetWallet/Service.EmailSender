@@ -50,5 +50,13 @@ namespace Service.EmailSender.Grpc.Models
         [DataMember(Order = 14)] 
         public string ReceiveAmount { get; set; }
 
+        [DataMember(Order = 15)] 
+        public string Location { get; set; }
+        
+        [DataMember(Order = 16)]
+        public string Timestamp { get; set; }
+        
+        [DataMember(Order = 17)]
+        public string PhoneModel { get; set; }
     }
 }

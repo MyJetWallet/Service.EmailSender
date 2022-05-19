@@ -12,5 +12,11 @@ namespace Service.EmailSender.Domain.Models.DataModels
         
         [JsonProperty("loginTime")]
         public string LoginTime { get; set; }
+        
+        [JsonProperty("phoneModel")]
+        public string PhoneModel { get; set; }
+        
+        [JsonProperty("location")]
+        public string Location { get; set; }
     }
 }

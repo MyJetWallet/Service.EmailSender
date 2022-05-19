@@ -25,5 +25,11 @@ namespace Service.EmailSender.Grpc.Models
         
         [DataMember(Order = 6)]
         public string LoginTime { get; set; }
+
+        [DataMember(Order = 7)]
+        public string PhoneModel { get; set; }
+        
+        [DataMember(Order = 8)]
+        public string Location { get; set; }
     }
 }
