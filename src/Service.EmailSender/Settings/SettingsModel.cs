@@ -100,5 +100,8 @@ namespace Service.EmailSender.Settings
         [YamlProperty("EmailSender.EmailTemplatesSettings.Spot2faSettingsChangedEmailSettings")]
         public Dictionary<string, BaseEmailSettings> Spot2faSettingsChangedEmailSettings { get; set; }
  
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotSuspiciousActivityEmailSettings")]
+        public Dictionary<string, BaseEmailSettings> SpotSuspiciousActivityEmailSettings { get; set; }
+
     }
 }

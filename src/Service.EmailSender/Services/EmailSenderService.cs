@@ -933,6 +933,37 @@ namespace Service.EmailSender.Services
             _logger.LogInformation("Sent JobCvPositionSubmit to {maskedEmail}", emailMasked);
             return SettingsManager.EmailSentSuccessResponse(emailSettings, requestContract);
         }
+        
+        public async ValueTask<EmailSenderGrpcResponseContract> SendSuspiciousActivityEmailAsync(SuspiciousActivityBannedEmailGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotSuspiciousActivityEmailSettings, requestContract);
+
+            if (settingsResult.Error)
+            {                
+                _logger.LogError("Unable to send SuspiciousActivityEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+            
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new ()
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {                
+                _logger.LogError("Unable to send SuspiciousActivityEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent SuspiciousActivityEmail to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+        }
     }
     
     public static class EmailMaskedHelper

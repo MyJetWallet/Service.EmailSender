@@ -56,7 +56,9 @@ namespace Service.EmailSender.Grpc
         ValueTask<EmailSenderGrpcResponseContract> SendKycDocumentsDeclinedEmailAsync(KycDeclinedEmailGrpcRequestContract requestContract);
         [OperationContract]
         ValueTask<EmailSenderGrpcResponseContract> SendKycBannedEmailAsync(KycBannedEmailGrpcRequestContract requestContract);
-        
+        [OperationContract]
+        ValueTask<EmailSenderGrpcResponseContract> SendSuspiciousActivityEmailAsync(SuspiciousActivityBannedEmailGrpcRequestContract requestContract);
+
         //SignInFailed
         [OperationContract]
         ValueTask<EmailSenderGrpcResponseContract> SendSignInFailed1HEmailAsync(SignInFailedGrpcRequestContract requestContract);
