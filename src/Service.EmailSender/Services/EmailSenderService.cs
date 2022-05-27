@@ -412,6 +412,8 @@ namespace Service.EmailSender.Services
                 {
                     AssetSymbol = requestContract.AssetSymbol,
                     Amount = requestContract.Amount,
+                    TransId = requestContract.OperationId,
+                    TimeTrans = requestContract.Timestamp,
                 }
             };
 
@@ -591,6 +593,8 @@ namespace Service.EmailSender.Services
                 {
                     AssetSymbol = requestContract.AssetSymbol,
                     Amount = requestContract.Amount,
+                    TransId = requestContract.OperationId,
+                    TimeTrans = requestContract.Timestamp,
                 }
             };
 

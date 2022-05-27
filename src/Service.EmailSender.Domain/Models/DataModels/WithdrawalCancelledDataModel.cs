@@ -9,5 +9,11 @@ namespace Service.EmailSender.Domain.Models.DataModels
         
         [JsonProperty("amount")]
         public string Amount { get; set; }
+        
+        [JsonProperty("transID")]
+        public string TransId { get; set; }
+
+        [JsonProperty("timeTrans")]
+        public string TimeTrans { get; set; }
     }
 }
