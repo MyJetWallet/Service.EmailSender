@@ -22,7 +22,7 @@ namespace Service.EmailSender.Domain.Models.DataModels
         [JsonProperty("ipAddress")]
         public string IpAddress { get; set; }
         
-        [JsonProperty("TimeTrans")]
+        [JsonProperty("timeTrans")]
         public string TimeTrans { get; set; }
         
         [JsonProperty("phoneModel")]

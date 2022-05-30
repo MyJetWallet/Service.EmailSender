@@ -31,7 +31,7 @@ namespace Service.EmailSender.Domain.Models.DataModels
         [JsonProperty("receiveAmount")]
         public string ReceiveAmount { get; set; }
         
-        [JsonProperty("TimeTrans")]
+        [JsonProperty("timeTrans")]
         public string TimeTrans { get; set; }
         
         [JsonProperty("phoneModel")]
