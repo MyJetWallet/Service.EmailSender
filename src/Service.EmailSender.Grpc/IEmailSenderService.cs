@@ -68,5 +68,8 @@ namespace Service.EmailSender.Grpc
         ValueTask<EmailSenderGrpcResponseContract> SendSignInFailed2Fa1HEmailAsync(SignInFailedGrpcRequestContract requestContract);
         [OperationContract]
         ValueTask<EmailSenderGrpcResponseContract> SendSignInFailed2Fa24HEmailAsync(SignInFailedGrpcRequestContract requestContract);
+
+	    //HighYield
+	    ValueTask<EmailSenderGrpcResponseContract> SendClientOfferTerminateEmailAsync(ClientOfferTerminateGrpcRequestContract requestContract);
     }
 }
