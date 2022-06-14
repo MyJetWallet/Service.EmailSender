@@ -1005,7 +1005,50 @@ namespace Service.EmailSender.Services
             _logger.LogInformation("Sent SendClientOfferTerminateEmail to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendProfileDeleteConfirmEmail(ConfirmProfileDeleteGrpcRequestContract requestContract)
+        {
+            if (Regex.IsMatch(requestContract.Email, Program.Settings.IgnoreEmailsDomains))
+            {
+                return SettingsManager.EmailError($"Email in ignored list: {requestContract.Email}");
+            }
+
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotProfileDeleteConfirmEmailSettings, requestContract);
+
+            if (settingsResult.Error)
+            {               
+                _logger.LogWarning("Unable to send ProfileDeleteConfirmEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+
+	        string templateId = settingsResult.Value.SendGridTemplateId;
+
+	        var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = templateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new
+                {
+                    code = requestContract.Code,
+                    link = requestContract.Link
+                }
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {
+                _logger.LogError("Unable to send ProfileDeleteConfirmEmail to userId {userId}, email {maskedEmail}. Error message: {errorMessage}", requestContract.TraderId, requestContract.Email, sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+            
+            _logger.LogInformation("Sent ProfileDeleteConfirmEmail to {maskedEmail}, templateId: {templateId}", requestContract.Email.Mask(), templateId);
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+        }
     }
+    
     
     public static class EmailMaskedHelper
     {

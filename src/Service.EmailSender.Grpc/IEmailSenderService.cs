@@ -19,7 +19,8 @@ namespace Service.EmailSender.Grpc
         ValueTask<EmailSenderGrpcResponseContract> SendLoginEmailAsync(LoginEmailGrpcRequestContract requestContract);
         [OperationContract]
         ValueTask<EmailSenderGrpcResponseContract> SendJobCvPositionSubmitEmailAsync(JobCvPositionSubmitGrpcRequestContract requestContract);
-        
+        [OperationContract]
+        ValueTask<EmailSenderGrpcResponseContract> SendProfileDeleteConfirmEmail(ConfirmProfileDeleteGrpcRequestContract requestContract);
         //2fa
         ValueTask<EmailSenderGrpcResponseContract> Send2FaSettingsChangedEmailAsync(TwoFaSettingsChangedGrpcRequestContract requestContract);
 

@@ -105,6 +105,9 @@ namespace Service.EmailSender.Settings
  
         [YamlProperty("EmailSender.EmailTemplatesSettings.SpotClientOfferTerminateEmailSettings")]
         public Dictionary<string, BaseEmailSettings> SpotClientOfferTerminateEmailSettings { get; set; }
+        
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotProfileDeleteConfirmEmailSettings")]
+        public Dictionary<string, BaseEmailSettings> SpotProfileDeleteConfirmEmailSettings { get; set; }
 
     }
 }
