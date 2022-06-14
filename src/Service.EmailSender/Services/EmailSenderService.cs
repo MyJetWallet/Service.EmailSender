@@ -990,7 +990,7 @@ namespace Service.EmailSender.Services
                     AssetSymbol = requestContract.AssetSymbol,
                     Amount = requestContract.Amount,
                     SubscriptionName = requestContract.SubscriptionName,
-                    InterestEarn = requestContract.InterestEarn.ToString("F")
+                    InterestEarn = requestContract.InterestEarn.ToString()
                 }
             };
 
