@@ -102,6 +102,9 @@ namespace Service.EmailSender.Settings
  
         [YamlProperty("EmailSender.EmailTemplatesSettings.SpotSuspiciousActivityEmailSettings")]
         public Dictionary<string, BaseEmailSettings> SpotSuspiciousActivityEmailSettings { get; set; }
+ 
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotClientOfferTerminateEmailSettings")]
+        public Dictionary<string, BaseEmailSettings> SpotClientOfferTerminateEmailSettings { get; set; }
 
     }
 }

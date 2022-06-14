@@ -968,6 +968,43 @@ namespace Service.EmailSender.Services
             _logger.LogInformation("Sent SuspiciousActivityEmail to {maskedEmail}", requestContract.Email.Mask());
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
+
+        public async ValueTask<EmailSenderGrpcResponseContract> SendClientOfferTerminateEmailAsync(ClientOfferTerminateGrpcRequestContract requestContract)
+        {
+            var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotClientOfferTerminateEmailSettings, requestContract);
+
+            if (settingsResult.Error)
+            {
+                _logger.LogError("Unable to send SendClientOfferTerminateEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = settingsResult.Value.SendGridTemplateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new ClientOfferTerminateDataModel
+                {
+                    AssetSymbol = requestContract.AssetSymbol,
+                    Amount = requestContract.Amount,
+                    SubscriptionName = requestContract.SubscriptionName,
+                    InterestEarn = requestContract.InterestEarn.ToString("F")
+                }
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {
+                _logger.LogError("Unable to send SendClientOfferTerminateEmail to  email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+
+            _logger.LogInformation("Sent SendClientOfferTerminateEmail to {maskedEmail}", requestContract.Email.Mask());
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+        }
     }
     
     public static class EmailMaskedHelper
