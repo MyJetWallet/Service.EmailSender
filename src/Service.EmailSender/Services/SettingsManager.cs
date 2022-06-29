@@ -27,6 +27,12 @@ namespace Service.EmailSender.Services
 
         public OperationResult<T> GetSettings<T>(Dictionary<string, T> dictionary, IEmailGrpcRequestContract requestContract)
         {
+            if(string.IsNullOrWhiteSpace(requestContract.Platform))
+            {
+                _logger.LogWarning("Received request without platform. Email {maskedEmail}", requestContract.Email);
+                requestContract.Platform = "spot";
+            }
+            
             var key = GetEmailSettingsKey(requestContract);
 
             if (dictionary.TryGetValue(key, out T emailSettings))
