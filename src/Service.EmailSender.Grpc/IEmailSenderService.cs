@@ -12,6 +12,8 @@ namespace Service.EmailSender.Grpc
         [OperationContract]
         ValueTask<EmailSenderGrpcResponseContract> SendVerificationCodeEmail(ConfirmEmailGrpcRequestContract requestContract);
         [OperationContract]
+        ValueTask<EmailSenderGrpcResponseContract> SendSignInVerificationCodeEmail(SignInVerificationCodeEmailRequest requestContract);
+        [OperationContract]
         ValueTask<EmailSenderGrpcResponseContract> SendRecoveryEmailAsync(RecoveryEmailGrpcRequestContract requestContract);
         [OperationContract]
         ValueTask<EmailSenderGrpcResponseContract> SendAlreadyRegisteredEmailAsync(AlreadyRegisteredEmailGrpcRequestContract requestContract);

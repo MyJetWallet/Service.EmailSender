@@ -113,7 +113,47 @@ namespace Service.EmailSender.Services
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
 
-        public async ValueTask<EmailSenderGrpcResponseContract> SendRecoveryEmailAsync(RecoveryEmailGrpcRequestContract requestContract)
+	    public async ValueTask<EmailSenderGrpcResponseContract> SendSignInVerificationCodeEmail(SignInVerificationCodeEmailRequest requestContract)
+	    {
+            if (Regex.IsMatch(requestContract.Email, Program.Settings.IgnoreEmailsDomains))
+	            return SettingsManager.EmailError($"Email in ignored list: {requestContract.Email}");
+
+		    var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotSignInVerifyByEmailSettings, requestContract);
+
+            if (settingsResult.Error)
+            {
+                _logger.LogWarning("Unable to send SignInVerificationCodeEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email.Mask(), settingsResult.ErrorMessage);
+                return SettingsManager.EmailError(settingsResult.ErrorMessage);
+            }
+
+            string templateId = settingsResult.Value.SendGridTemplateId;
+
+            var emailModel = new EmailModel
+            {
+                To = requestContract.Email,
+                SendGridTemplateId = templateId,
+                Subject = settingsResult.Value.Subject,
+                Brand = requestContract.Brand,
+                Data = new
+                {
+                    code = requestContract.Code,
+                    link = requestContract.Link
+                }
+            };
+
+            var sendingResult = await _emailSender.SendMailAsync(emailModel);
+
+            if (sendingResult.Error)
+            {
+                _logger.LogError("Unable to send SignInVerificationCodeEmail to email {maskedEmail}. Error message: {errorMessage}", requestContract.Email, sendingResult.ErrorMessage);
+                return SettingsManager.EmailError(sendingResult.ErrorMessage);
+            }
+
+            _logger.LogInformation("Sent SignInVerificationCodeEmail to {maskedEmail}, templateId: {templateId}", requestContract.Email.Mask(), templateId);
+            return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
+        }
+
+	    public async ValueTask<EmailSenderGrpcResponseContract> SendRecoveryEmailAsync(RecoveryEmailGrpcRequestContract requestContract)
         {
             var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotRecoveryEmailSettings, requestContract);
 

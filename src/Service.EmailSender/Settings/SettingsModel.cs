@@ -33,6 +33,9 @@ namespace Service.EmailSender.Settings
 
         [YamlProperty("EmailSender.EmailTemplatesSettings.SpotVerifyByEmailSettings")]
         public Dictionary<string, BaseEmailSettings> SpotVerifyByEmailSettings { get; set; }
+
+        [YamlProperty("EmailSender.EmailTemplatesSettings.SpotSignInVerifyByEmailSettings")]
+        public Dictionary<string, BaseEmailSettings> SpotSignInVerifyByEmailSettings { get; set; }
         
         [YamlProperty("EmailSender.EmailTemplatesSettings.SpotRecoveryEmailSettings")]
         public Dictionary<string, SpotRecoveryEmailSettings> SpotRecoveryEmailSettings { get; set; }
