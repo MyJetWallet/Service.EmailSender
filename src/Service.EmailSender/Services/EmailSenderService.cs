@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -10,6 +12,7 @@ using Service.EmailSender.Domain.Models.DataModels;
 using Service.EmailSender.Domain.SettingModels;
 using Service.EmailSender.Grpc;
 using Service.EmailSender.Grpc.Models;
+using Service.EmailSender.Helpers;
 
 namespace Service.EmailSender.Services
 {
@@ -137,7 +140,9 @@ namespace Service.EmailSender.Services
                 Data = new
                 {
                     code = requestContract.Code,
-                    link = requestContract.Link
+                    link = requestContract.Link,
+                    country = CultureInfoHelper.GetCountryName(requestContract.CountryCode),
+                    ip = requestContract.IpAddress
                 }
             };
 
@@ -153,7 +158,7 @@ namespace Service.EmailSender.Services
             return SettingsManager.EmailSentSuccessResponse(settingsResult.Value, requestContract);
         }
 
-	    public async ValueTask<EmailSenderGrpcResponseContract> SendRecoveryEmailAsync(RecoveryEmailGrpcRequestContract requestContract)
+        public async ValueTask<EmailSenderGrpcResponseContract> SendRecoveryEmailAsync(RecoveryEmailGrpcRequestContract requestContract)
         {
             var settingsResult = _settingsManager.GetSettings(Program.Settings.SpotRecoveryEmailSettings, requestContract);
 
